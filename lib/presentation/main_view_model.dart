@@ -20,11 +20,6 @@ class MainViewModel extends ChangeNotifier {
     final cameraUpdate = NCameraUpdate.withParams(
       target: NLatLng(longitude,latitude)
     );
-
-    // _mapController.updateCamera(cameraUpdate);
-
-    print(longitude);
-    print(latitude);
     notifyListeners();
   }
 }
