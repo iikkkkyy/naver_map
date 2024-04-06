@@ -3,22 +3,31 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_naver_map/flutter_naver_map.dart';
+import 'package:provider/provider.dart';
 
-class NaverMapApp extends StatelessWidget {
+import 'main_view_model.dart';
+
+class NaverMapApp extends StatefulWidget {
   const NaverMapApp({Key? key});
+  @override
+  State<NaverMapApp> createState() => _NaverMapAppState();
+}
 
+class _NaverMapAppState extends State<NaverMapApp> {
   @override
   Widget build(BuildContext context) {
     // NaverMapController 객체의 비동기 작업 완료를 나타내는 Completer 생성
     final Completer<NaverMapController> mapControllerCompleter = Completer();
-
+    final viewModel = context.watch<MainViewModel>();
     return MaterialApp(
       home: Scaffold(
         body: NaverMap(
-          options: const NaverMapViewOptions(
+          options: NaverMapViewOptions(
             initialCameraPosition: NCameraPosition(
-                target: NLatLng(37.5666, 126.979), // 시작시 경도,위도
-                zoom: 15, // 확대 정도
+                target: NLatLng(viewModel.longitude, viewModel.latitude),
+                // 시작시 경도,위도
+                zoom: 15,
+                // 확대 정도
                 bearing: 0,
                 tilt: 0),
             indoorEnable: true, // 실내 맵 사용 가능 여부 설정
@@ -30,6 +39,10 @@ class NaverMapApp extends StatelessWidget {
             mapControllerCompleter
                 .complete(controller); // Completer에 지도 컨트롤러 완료 신호 전송
             log("onMapReady", name: "onMapReady");
+            await viewModel.getLocationData();
+            controller.updateCamera(NCameraUpdate.withParams(
+                target: NLatLng(viewModel.latitude,viewModel.longitude)
+            ));
           },
         ),
       ),
