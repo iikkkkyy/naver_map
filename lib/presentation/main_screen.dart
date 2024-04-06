@@ -39,9 +39,11 @@ class _NaverMapAppState extends State<NaverMapApp> {
             mapControllerCompleter
                 .complete(controller); // Completer에 지도 컨트롤러 완료 신호 전송
             log("onMapReady", name: "onMapReady");
-            await viewModel.getLocationData();
+            // await viewModel.getLocationData();
+            var nMarker = NMarker(id: "test", position: NLatLng(viewModel.longitude,viewModel.latitude));
+            controller.addOverlay(nMarker);
             controller.updateCamera(NCameraUpdate.withParams(
-                target: NLatLng(viewModel.latitude,viewModel.longitude)
+                target: NLatLng(viewModel.longitude,viewModel.latitude)
             ));
           },
         ),
