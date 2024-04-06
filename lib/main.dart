@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'dart:developer';
 import 'package:flutter_naver_map/flutter_naver_map.dart';
 import 'package:naver_map_test/presentation/main_screen.dart';
+import 'package:naver_map_test/presentation/main_view_model.dart';
+import 'package:provider/provider.dart';
 
 void main() async {
   await _initialize();
@@ -30,7 +32,10 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const NaverMapApp(),
+      home: ChangeNotifierProvider(
+        create: (BuildContext context) => MainViewModel()..getLocationData(),
+        child: const NaverMapApp(),
+      ),
     );
   }
 }
